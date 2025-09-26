@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://ufo-token-landing.vercel.app/sitemap.xml
+
+# UFO Token - Beam Your Way to the Moon 🛸
+# Join the galactic community at https://four.meme/ufo
