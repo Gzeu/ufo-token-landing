@@ -29,7 +29,7 @@ export default function Home() {
       <HeroSection />
       
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -86,7 +86,7 @@ export default function Home() {
       <MissionsSection />
 
       {/* Community Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="community" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -105,31 +105,33 @@ export default function Home() {
                 {
                   name: "Twitter",
                   icon: <Twitter className="w-6 h-6" />,
-                  href: "#",
+                  href: "https://twitter.com/ufotoken",
                   color: "hover:text-blue-400"
                 },
                 {
                   name: "Discord",
                   icon: <MessageCircle className="w-6 h-6" />,
-                  href: "#",
+                  href: "https://discord.gg/ufotoken",
                   color: "hover:text-purple-400"
                 },
                 {
                   name: "Telegram",
                   icon: <Users className="w-6 h-6" />,
-                  href: "#",
+                  href: "https://t.me/ufotoken",
                   color: "hover:text-blue-500"
                 },
                 {
                   name: "GitHub",
                   icon: <Github className="w-6 h-6" />,
-                  href: "#",
+                  href: "https://github.com/ufotoken",
                   color: "hover:text-gray-400"
                 }
               ].map((social, index) => (
                 <motion.a
                   key={social.name}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   whileHover={{ scale: 1.1 }}
