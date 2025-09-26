@@ -11,8 +11,11 @@ import {
   Star,
   Users,
   Gift,
-  TrendingUp
+  TrendingUp,
+  ExternalLink
 } from 'lucide-react'
+import ShareBar from './ShareBar'
+import { FOUR_MEME_REF_URL } from '../config/links'
 
 interface Mission {
   id: string
@@ -25,6 +28,7 @@ interface Mission {
   icon: React.ReactNode
   status: 'active' | 'completed' | 'locked'
   participants: number
+  isReferral?: boolean
 }
 
 const mockMissions: Mission[] = [
@@ -55,14 +59,15 @@ const mockMissions: Mission[] = [
   {
     id: '3',
     title: 'Social Invader',
-    description: 'Share UFO Token on Twitter and tag 3 fellow space explorers.',
-    reward: '750 UFO + Influencer Badge',
+    description: 'Share UFO Token on Twitter and tag 3 fellow space explorers. Earn 10% of friends\' trading fees!',
+    reward: '750 UFO + Influencer Badge + Referral Rewards',
     difficulty: 'Easy',
     timeLeft: '5 days left',
     progress: 0,
     icon: <Users className="w-6 h-6" />,
     status: 'active',
-    participants: 1256
+    participants: 1256,
+    isReferral: true
   },
   {
     id: '4',
@@ -78,6 +83,19 @@ const mockMissions: Mission[] = [
   },
   {
     id: '5',
+    title: 'Alien Ambassador',
+    description: 'Invite 10 friends to join the UFO invasion using your referral link and earn massive rewards.',
+    reward: '5,000 UFO + Ambassador Badge + Ongoing Commissions',
+    difficulty: 'Hard',
+    timeLeft: '10 days left',
+    progress: 25,
+    icon: <Gift className="w-6 h-6" />,
+    status: 'active',
+    participants: 234,
+    isReferral: true
+  },
+  {
+    id: '6',
     title: 'Mission Commander',
     description: 'Complete all available missions to become a true UFO commander.',
     reward: '10,000 UFO + Commander Badge',
@@ -86,18 +104,6 @@ const mockMissions: Mission[] = [
     icon: <Award className="w-6 h-6" />,
     status: 'locked',
     participants: 0
-  },
-  {
-    id: '6',
-    title: 'Alien Ambassador',
-    description: 'Invite 10 friends to join the UFO invasion and earn massive rewards.',
-    reward: '5,000 UFO + Ambassador Badge',
-    difficulty: 'Hard',
-    timeLeft: '10 days left',
-    progress: 25,
-    icon: <Gift className="w-6 h-6" />,
-    status: 'active',
-    participants: 234
   }
 ]
 
@@ -121,6 +127,55 @@ export default function MissionsSection() {
     }
   }
 
+  const getMissionButton = (mission: Mission) => {
+    if (mission.status === 'completed') {
+      return (
+        <motion.button
+          className="px-4 py-2 rounded-full font-medium bg-green-400/20 text-green-400 cursor-default"
+        >
+          Completed
+        </motion.button>
+      )
+    }
+    
+    if (mission.status === 'locked') {
+      return (
+        <motion.button
+          className="px-4 py-2 rounded-full font-medium bg-gray-500/20 text-gray-500 cursor-not-allowed"
+          disabled
+        >
+          Locked
+        </motion.button>
+      )
+    }
+    
+    if (mission.isReferral) {
+      return (
+        <motion.a
+          href={FOUR_MEME_REF_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-medium bg-gradient-to-r from-green-500/20 to-blue-500/20 hover:from-green-500/30 hover:to-blue-500/30 border border-green-400/50 text-green-300 hover:text-white transition-all duration-300"
+        >
+          <ExternalLink className="w-4 h-4" />
+          Start Mission
+        </motion.a>
+      )
+    }
+    
+    return (
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="px-4 py-2 rounded-full font-medium bg-ufo-beam/20 text-ufo-beam hover:bg-ufo-beam hover:text-white transition-all duration-300"
+      >
+        Start Mission
+      </motion.button>
+    )
+  }
+
   return (
     <section id="missions" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
@@ -133,10 +188,27 @@ export default function MissionsSection() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-glow">
             🚀 Invasion Missions
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             Complete epic UFO missions, earn cosmic rewards, and unlock exclusive badges. 
             Each mission brings you closer to becoming the ultimate space commander!
           </p>
+          
+          {/* Referral CTA Section */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-green-900/20 backdrop-blur-sm border border-green-400/30 rounded-2xl p-6 mb-12 max-w-2xl mx-auto"
+          >
+            <h3 className="text-xl font-bold text-green-400 mb-3 flex items-center justify-center gap-2">
+              🛸 Share & Earn Referral Rewards
+            </h3>
+            <p className="text-green-300/80 text-sm mb-4">
+              Share UFO Token with your friends using your special referral link and earn <strong>10% of their trading fees</strong> on four.meme!
+            </p>
+            <ShareBar className="justify-center" />
+          </motion.div>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8">
@@ -150,8 +222,17 @@ export default function MissionsSection() {
               whileHover={{ scale: mission.status !== 'locked' ? 1.02 : 1 }}
               className={`card-cosmic relative overflow-hidden ${
                 mission.status === 'locked' ? 'opacity-60' : ''
-              } ${getStatusColor(mission.status)} border-2`}
+              } ${getStatusColor(mission.status)} border-2 ${
+                mission.isReferral ? 'ring-2 ring-green-400/20' : ''
+              }`}
             >
+              {/* Referral Badge */}
+              {mission.isReferral && (
+                <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-green-500/30 to-blue-500/30 border border-green-400/50 rounded-full text-xs font-bold text-green-300">
+                  💰 Referral Rewards
+                </div>
+              )}
+              
               {/* Status indicator */}
               <div className="absolute top-4 right-4">
                 {mission.status === 'completed' && (
@@ -165,7 +246,7 @@ export default function MissionsSection() {
                 )}
               </div>
 
-              <div className="flex items-start gap-4 mb-4">
+              <div className="flex items-start gap-4 mb-4 mt-6">
                 <div className={`p-3 rounded-full ${mission.status === 'completed' ? 'bg-green-400/20' : 'bg-ufo-beam/20'}`}>
                   <div className={mission.status === 'completed' ? 'text-green-400' : 'text-ufo-beam'}>
                     {mission.icon}
@@ -212,27 +293,23 @@ export default function MissionsSection() {
                 </div>
               </div>
               
+              {/* Special Social Mission Content */}
+              {mission.isReferral && mission.status === 'active' && (
+                <div className="mb-4 p-3 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-400/30 rounded-lg">
+                  <p className="text-xs text-green-300 mb-3 text-center">
+                    💡 Use these tools to complete your mission and earn ongoing rewards!
+                  </p>
+                  <ShareBar />
+                </div>
+              )}
+              
               <div className="border-t border-ufo-beam/20 pt-4 flex justify-between items-center">
                 <div>
                   <span className="text-sm text-gray-400">Reward:</span>
                   <div className="font-bold text-cosmic-yellow">{mission.reward}</div>
                 </div>
                 
-                <motion.button
-                  whileHover={mission.status !== 'locked' ? { scale: 1.05 } : {}}
-                  whileTap={mission.status !== 'locked' ? { scale: 0.95 } : {}}
-                  disabled={mission.status === 'locked' || mission.status === 'completed'}
-                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
-                    mission.status === 'completed'
-                      ? 'bg-green-400/20 text-green-400 cursor-default'
-                      : mission.status === 'locked'
-                      ? 'bg-gray-500/20 text-gray-500 cursor-not-allowed'
-                      : 'bg-ufo-beam/20 text-ufo-beam hover:bg-ufo-beam hover:text-white'
-                  }`}
-                >
-                  {mission.status === 'completed' ? 'Completed' :
-                   mission.status === 'locked' ? 'Locked' : 'Start Mission'}
-                </motion.button>
+                {getMissionButton(mission)}
               </div>
               
               {/* Beam effect for active missions */}
@@ -254,15 +331,16 @@ export default function MissionsSection() {
         >
           <p className="text-gray-400 mb-6">Ready to start your cosmic adventure?</p>
           <motion.a
-            href="https://four.meme/token/0x7650a9c4543473cb0d1c73de441360bb92374444"
+            href={FOUR_MEME_REF_URL}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="btn-primary"
+            className="btn-primary inline-flex items-center gap-3"
           >
             <Star className="w-5 h-5" />
             Begin Invasion
+            <ExternalLink className="w-4 h-4" />
           </motion.a>
         </motion.div>
       </div>
