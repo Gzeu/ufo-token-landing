@@ -27,6 +27,8 @@ import {
   formatAddress 
 } from '../lib/ufo-contract';
 import { UFO_REOWN_CONFIG } from '../lib/reown';
+import { FOUR_MEME_REF_URL } from '../config/links';
+import ShareBar from './ShareBar';
 
 // Simple Web3 detection
 declare global {
@@ -37,7 +39,7 @@ declare global {
 
 /**
  * 🛸 Enhanced UFO Wallet Component
- * Simplified version with basic Web3 connectivity
+ * Simplified version with basic Web3 connectivity and referral integration
  */
 export default function UFOWallet() {
   const { showToast } = useToast();
@@ -291,9 +293,12 @@ export default function UFOWallet() {
             MetaMask • Trust Wallet • WalletConnect Compatible
           </div>
           
-          {/* Reown Project Info */}
-          <div className="text-center text-xs text-green-300/40">
-            Project ID: {UFO_REOWN_CONFIG.projectId.slice(0, 8)}...
+          {/* Referral Promotion */}
+          <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-400/30 rounded-lg p-4 mt-4">
+            <p className="text-green-300 text-sm text-center mb-3">
+              💰 <strong>Earn 10% referral fees</strong> when friends trade UFO!
+            </p>
+            <ShareBar className="justify-center" />
           </div>
         </div>
       ) : (
@@ -349,61 +354,102 @@ export default function UFOWallet() {
             )}
           </div>
 
-          {/* Token Information */}
-          {isCorrectNetwork && (
-            <div className="bg-black/20 rounded-xl p-4 border border-green-400/20">
-              <h3 className="text-green-400 font-semibold mb-3 flex items-center gap-2">
-                <Zap className="w-4 h-4" />
-                UFO Token Info
-              </h3>
+          {/* Token Information & Trading */}
+          <div className="bg-black/20 rounded-xl p-4 border border-green-400/20">
+            <h3 className="text-green-400 font-semibold mb-3 flex items-center gap-2">
+              <Zap className="w-4 h-4" />
+              UFO Token Trading
+            </h3>
+            
+            <div className="space-y-3 text-sm mb-4">
+              <div className="flex justify-between">
+                <span className="text-green-300/70">Symbol:</span>
+                <span className="text-green-300 font-bold">UFO</span>
+              </div>
               
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-green-300/70">Symbol:</span>
-                  <span className="text-green-300 font-bold">UFO</span>
-                </div>
-                
-                <div className="flex justify-between">
-                  <span className="text-green-300/70">Network:</span>
-                  <span className="text-green-300">BNB Smart Chain</span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-green-300/70">Trade:</span>
-                  <a 
-                    href="https://four.meme/token/0x7650a9c4543473cb0d1c73de441360bb92374444"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
-                  >
-                    four.meme
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-                
-                <div className="pt-2 border-t border-green-400/20">
-                  <p className="text-green-300/60 text-xs text-center">
-                    🚀 Add UFO Token to your wallet to see balance and make transfers
-                  </p>
-                </div>
+              <div className="flex justify-between">
+                <span className="text-green-300/70">Network:</span>
+                <span className="text-green-300">BNB Smart Chain</span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-green-300/70">Trade & Earn:</span>
+                <span className="text-green-400 font-bold">💰 10% Referral Fees</span>
               </div>
             </div>
-          )}
+
+            {/* Trading CTA */}
+            <a 
+              href={FOUR_MEME_REF_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 rounded-lg text-white font-bold transition-all duration-300 mb-4"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Trade UFO on four.meme
+            </a>
+            
+            {/* Share Section */}
+            <div className="border-t border-green-400/20 pt-4">
+              <p className="text-green-300/60 text-xs text-center mb-3">
+                🚀 Share with friends and earn ongoing trading fee rewards!
+              </p>
+              <ShareBar />
+            </div>
+          </div>
+
+          {/* Advanced Options (collapsed by default) */}
+          <motion.div 
+            className="bg-black/20 rounded-xl border border-green-400/20 overflow-hidden"
+          >
+            <button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-green-400/5 transition-colors"
+            >
+              <span className="text-green-400 font-medium flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                Advanced Options
+              </span>
+              <motion.div
+                animate={{ rotate: showAdvanced ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Info className="w-4 h-4 text-green-400" />
+              </motion.div>
+            </button>
+            
+            <AnimatePresence>
+              {showAdvanced && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="border-t border-green-400/20"
+                >
+                  <div className="p-4 space-y-3 text-sm">
+                    <p className="text-green-300/60 text-xs">
+                      🔧 Advanced wallet features and token management will be available in future updates.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-2">
+                      <button className="p-2 bg-gray-700/30 rounded text-gray-400 text-xs" disabled>
+                        Add Token
+                      </button>
+                      <button className="p-2 bg-gray-700/30 rounded text-gray-400 text-xs" disabled>
+                        View on BSCScan
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
       )}
 
       {/* Footer Links */}
       <div className="mt-6 text-center space-y-2">
-        <a 
-          href="https://four.meme/token/0x7650a9c4543473cb0d1c73de441360bb92374444"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-green-400/70 hover:text-green-300 text-xs flex items-center justify-center gap-1 transition-colors"
-        >
-          🚀 Trade on four.meme
-          <ExternalLink className="w-3 h-3" />
-        </a>
-        
         <div className="text-xs text-green-300/50">
           Powered by Web3 • Secure • Decentralized
         </div>
