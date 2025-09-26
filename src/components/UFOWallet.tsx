@@ -26,7 +26,6 @@ import {
   UFO_CONTRACT_ADDRESS, 
   formatAddress 
 } from '../lib/ufo-contract';
-import { UFO_REOWN_CONFIG } from '../lib/reown';
 import { FOUR_MEME_REF_URL } from '../config/links';
 import ShareBar from './ShareBar';
 
