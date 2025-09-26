@@ -1,5 +1,5 @@
-import { ethers } from 'ethers';
-import { UFO_TOKEN_INFO } from './ufo-contract';
+// Simplified wallet validation without ethers dependency
+// This ensures Vercel build compatibility
 
 // Validation Result Interface
 interface ValidationResult {
@@ -31,8 +31,8 @@ const SUPPORTED_NETWORKS = {
 };
 
 /**
- * 🛸 ADDRESS VALIDATION
- * Validates Ethereum addresses with comprehensive checks
+ * 🛸 SIMPLE ADDRESS VALIDATION
+ * Basic Ethereum address format validation
  */
 export function validateAddress(address: string): ValidationResult {
   // Empty address check
@@ -59,20 +59,12 @@ export function validateAddress(address: string): ValidationResult {
     };
   }
 
-  // Ethers.js validation
-  if (!ethers.isAddress(address)) {
+  // Basic hex validation
+  const hexPattern = /^0x[a-fA-F0-9]{40}$/;
+  if (!hexPattern.test(address)) {
     return {
       isValid: false,
-      error: 'Invalid Ethereum address format'
-    };
-  }
-
-  // Checksum validation
-  const checksumAddress = ethers.getAddress(address);
-  if (address !== checksumAddress && address !== address.toLowerCase()) {
-    return {
-      isValid: true,
-      warning: 'Address checksum is invalid. Consider using the correct case.'
+      error: 'Invalid address format'
     };
   }
 
@@ -209,7 +201,7 @@ export function validateContractAddress(address: string): ValidationResult {
   const dangerousAddresses = [
     '0x000000000000000000000000000000000000dead', // Burn address
     '0x0000000000000000000000000000000000000000', // Zero address
-    UFO_TOKEN_INFO.address?.toLowerCase(), // UFO Token contract itself
+    '0x7650a9c4543473cb0d1c73de441360bb92374444', // UFO Token contract
   ];
 
   const lowerAddress = address.toLowerCase();
