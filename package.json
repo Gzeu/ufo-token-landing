@@ -1,13 +1,27 @@
 {
   "name": "ufo-token-landing",
   "version": "1.0.0",
-  "description": "UFO Token - A playful cryptocurrency meme token landing page",
+  "description": "UFO Token - A playful cryptocurrency meme token landing page with cosmic design, leaderboards, and community missions",
   "private": true,
+  "homepage": "https://ufo-token-landing.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gzeu/ufo-token-landing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Gzeu/ufo-token-landing/issues"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "build:analyze": "ANALYZE=true next build",
+    "export": "next export",
+    "clean": "rm -rf .next out",
+    "prepare": "npm run lint && npm run type-check"
   },
   "dependencies": {
     "next": "^14.0.0",
@@ -27,6 +41,10 @@
     "eslint-config-next": "^14.0.0",
     "typescript": "^5.0.0"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "keywords": [
     "cryptocurrency",
     "meme-token",
@@ -34,8 +52,16 @@
     "defi",
     "blockchain",
     "nextjs",
-    "landing-page"
+    "landing-page",
+    "web3",
+    "cosmic",
+    "alien",
+    "four.meme"
   ],
-  "author": "UFO Token Team",
+  "author": {
+    "name": "UFO Token Team",
+    "email": "contact@ufotoken.space",
+    "url": "https://ufo-token-landing.vercel.app"
+  },
   "license": "MIT"
 }
