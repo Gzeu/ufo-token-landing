@@ -6,7 +6,7 @@ import { mainnet, bsc, polygon } from '@reown/appkit/networks';
 const projectId = '91fb1077a7e3d9424c832fc263b56ac5';
 
 // Configurare rețele - BNB Chain pentru UFO Token
-const networks = [bsc, mainnet, polygon];
+const networks = [bsc, mainnet, polygon] as const;
 
 // Adapter pentru Ethers.js
 const ethersAdapter = new EthersAdapter();
@@ -32,8 +32,7 @@ if (typeof window !== 'undefined') {
       analytics: true,
       email: true,
       socials: ['google', 'x', 'discord', 'farcaster'],
-      emailShowWallets: true,
-      socialShowWallets: true
+      emailShowWallets: true
     },
     themeMode: 'dark',
     themeVariables: {
