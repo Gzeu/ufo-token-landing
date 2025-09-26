@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import '../lib/reown' // Initialize Reown configuration
+import { ToastProvider } from '../components/ui/Toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -65,27 +66,29 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body className={`${inter.className} bg-cosmic-gradient min-h-screen text-white antialiased`}>
-        <div className="relative overflow-hidden">
-          {/* Animated background stars */}
-          <div className="fixed inset-0 z-0">
-            {[...Array(50)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 2}s`,
-                }}
-              />
-            ))}
+        <ToastProvider>
+          <div className="relative overflow-hidden">
+            {/* Animated background stars */}
+            <div className="fixed inset-0 z-0">
+              {[...Array(50)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                  }}
+                />
+              ))}
+            </div>
+            
+            {/* Main content with Toast provider context */}
+            <div className="relative z-10">
+              {children}
+            </div>
           </div>
-          
-          {/* Main content with Reown provider context */}
-          <div className="relative z-10">
-            {children}
-          </div>
-        </div>
+        </ToastProvider>
       </body>
     </html>
   )
