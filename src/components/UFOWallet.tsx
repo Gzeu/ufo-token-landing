@@ -54,9 +54,16 @@ import {
 export default function UFOWallet() {
   // === HOOKS AND STATE MANAGEMENT ===
   const { open } = useAppKit();
-  const { address, isConnected, chainId } = useAppKitAccount();
+  const { address, isConnected, caipAddress } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider('eip155');
   const { showToast } = useToast();
+  
+  // Extract chainId from caipAddress (format: "eip155:56:0x...")
+  const chainId = useMemo(() => {
+    if (!caipAddress) return undefined;
+    const parts = caipAddress.split(':');
+    return parts.length >= 2 ? parseInt(parts[1]) : undefined;
+  }, [caipAddress]);
   
   // Core state
   const [ufoBalance, setUfoBalance] = useState('0');
@@ -73,7 +80,10 @@ export default function UFOWallet() {
   
   // UI state
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [validationState, setValidationState] = useState({ errors: [], warnings: [] });
+  const [validationState, setValidationState] = useState<{
+    errors: string[];
+    warnings: string[];
+  }>({ errors: [], warnings: [] });
   
   // === COMPUTED VALUES ===
   const networkInfo = useMemo(() => {
@@ -124,7 +134,7 @@ export default function UFOWallet() {
     try {
       if (showLoader) setIsLoadingBalance(true);
       
-      const provider = new BrowserProvider(walletProvider);
+      const provider = new BrowserProvider(walletProvider as any);
       const contract = new Contract(UFO_CONTRACT_ADDRESS, UFO_ABI, provider);
       
       // Fetch UFO balance
@@ -194,7 +204,7 @@ export default function UFOWallet() {
    * Enhanced transfer with comprehensive validation and feedback
    */
   const handleTransfer = useCallback(async () => {
-    if (!isConnected || !transferAddress || !transferAmount) return;
+    if (!isConnected || !transferAddress || !transferAmount || !walletProvider) return;
     
     // Final validation before transfer
     const validation = validateTransfer({
@@ -228,7 +238,7 @@ export default function UFOWallet() {
     setTxHash('');
     
     try {
-      const provider = new BrowserProvider(walletProvider);
+      const provider = new BrowserProvider(walletProvider as any);
       const signer = await provider.getSigner();
       const contract = new Contract(UFO_CONTRACT_ADDRESS, UFO_ABI, signer);
       
@@ -562,7 +572,7 @@ export default function UFOWallet() {
                   value={transferAddress}
                   onChange={(e) => setTransferAddress(e.target.value)}
                   className={`w-full bg-black/30 border rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:outline-none transition-colors text-sm ${
-                    validationState.errors.some(e => e.includes('address') || e.includes('Address'))
+                    validationState.errors.some(e => e.toLowerCase().includes('address'))
                       ? 'border-red-400 focus:border-red-300'
                       : 'border-green-400/30 focus:border-green-400'
                   }`}
@@ -580,7 +590,7 @@ export default function UFOWallet() {
                     value={transferAmount}
                     onChange={(e) => setTransferAmount(e.target.value)}
                     className={`w-full bg-black/30 border rounded-lg px-3 py-2 pr-16 text-white placeholder-gray-400 focus:outline-none transition-colors text-sm ${
-                      validationState.errors.some(e => e.includes('amount') || e.includes('Amount') || e.includes('balance'))
+                      validationState.errors.some(e => e.toLowerCase().includes('amount') || e.toLowerCase().includes('balance'))
                         ? 'border-red-400 focus:border-red-300'
                         : 'border-green-400/30 focus:border-green-400'
                     }`}
