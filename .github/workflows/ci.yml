@@ -25,7 +25,7 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm install
     
     - name: Run ESLint
       run: npm run lint
@@ -44,14 +44,5 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
-    - name: Deploy to Vercel
-      uses: amondnet/vercel-action@v25
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        vercel-org-id: ${{ secrets.ORG_ID }}
-        vercel-project-id: ${{ secrets.PROJECT_ID }}
-        vercel-args: '--prod'
-        
-    - name: Deployment Success
-      run: echo "UFO Token has successfully landed on Vercel! 🛸🌙"
+    - name: Deploy notification
+      run: echo "UFO Token is ready to deploy to Vercel! 🛸🌙"
