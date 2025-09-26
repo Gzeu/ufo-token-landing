@@ -7,21 +7,43 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'UFO Token 🛸 | Beam Your Way to the Moon',
   description: 'Join the UFO invasion! Get random airdrops, climb the cosmic leaderboard, and complete galactic missions with UFO Token - the most playful meme token in the universe.',
-  keywords: 'UFO Token, cryptocurrency, meme token, DeFi, blockchain, airdrops, cosmic, alien, spaceship',
+  keywords: 'UFO Token, cryptocurrency, meme token, DeFi, blockchain, airdrops, cosmic, alien, spaceship, four.meme',
   authors: [{ name: 'UFO Token Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+  viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
   themeColor: '#7C3AED',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
   openGraph: {
     title: 'UFO Token 🛸 | Beam Your Way to the Moon',
-    description: 'Join the UFO invasion! Get random airdrops and complete galactic missions.',
+    description: 'Join the UFO invasion! Get random airdrops and complete galactic missions with the most playful meme token in the universe.',
     type: 'website',
     locale: 'en_US',
+    url: 'https://ufo-token-landing.vercel.app',
+    siteName: 'UFO Token',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'UFO Token 🛸 | Beam Your Way to the Moon',
     description: 'Join the UFO invasion! Get random airdrops and complete galactic missions.',
-  }
+    creator: '@ufotoken',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://ufo-token-landing.vercel.app',
+  },
 }
 
 export default function RootLayout({
@@ -31,6 +53,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://four.meme" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      </head>
       <body className={`${inter.className} bg-cosmic-gradient min-h-screen text-white antialiased`}>
         <div className="relative overflow-hidden">
           {/* Animated background stars */}
