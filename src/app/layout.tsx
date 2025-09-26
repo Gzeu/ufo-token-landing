@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import '../lib/reown' // Initialize Reown configuration
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'UFO Token 🛸 | Beam Your Way to the Moon',
-  description: 'Join the UFO invasion! Get random airdrops, climb the cosmic leaderboard, and complete galactic missions with UFO Token - the most playful meme token in the universe.',
-  keywords: 'UFO Token, cryptocurrency, meme token, DeFi, blockchain, airdrops, cosmic, alien, spaceship, four.meme',
+  description: 'Join the UFO invasion! Connect your wallet, get random airdrops, climb the cosmic leaderboard, and complete galactic missions with UFO Token - the most playful meme token in the universe.',
+  keywords: 'UFO Token, cryptocurrency, meme token, DeFi, blockchain, airdrops, cosmic, alien, spaceship, four.meme, wallet, reown, walletconnect',
   authors: [{ name: 'UFO Token Team' }],
   viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-  themeColor: '#7C3AED',
+  themeColor: '#00ff88',
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.ico',
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'UFO Token 🛸 | Beam Your Way to the Moon',
-    description: 'Join the UFO invasion! Get random airdrops and complete galactic missions with the most playful meme token in the universe.',
+    description: 'Join the UFO invasion! Connect your wallet and complete galactic missions with the most playful meme token in the universe.',
     type: 'website',
     locale: 'en_US',
     url: 'https://ufo-token-landing.vercel.app',
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'UFO Token 🛸 | Beam Your Way to the Moon',
-    description: 'Join the UFO invasion! Get random airdrops and complete galactic missions.',
+    description: 'Join the UFO invasion! Connect your wallet and complete galactic missions.',
     creator: '@ufotoken',
   },
   robots: {
@@ -57,6 +58,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://four.meme" />
+        <link rel="dns-prefetch" href="https://dashboard.reown.com" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -79,7 +81,7 @@ export default function RootLayout({
             ))}
           </div>
           
-          {/* Main content */}
+          {/* Main content with Reown provider context */}
           <div className="relative z-10">
             {children}
           </div>
