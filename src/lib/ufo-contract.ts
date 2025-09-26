@@ -31,7 +31,8 @@ export const UFO_TOKEN_INFO = {
   symbol: 'UFO',
   decimals: 18,
   chainId: 56, // BNB Chain
-  networkName: 'BNB Smart Chain'
+  networkName: 'BNB Smart Chain',
+  address: UFO_CONTRACT_ADDRESS // Add address to info object
 };
 
 // Helper functions pentru conversii
