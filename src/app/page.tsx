@@ -49,9 +49,7 @@ export default function Home() {
             </p>
             
             <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <span className="inline-flex items-center px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm border border-green-400/30">
-                ✅ Reown (WalletConnect) Integrated
-              </span>
+              
               <span className="inline-flex items-center px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-400/30">
                 🌐 BNB Smart Chain Ready
               </span>
