@@ -12,7 +12,8 @@ function buildTwitterIntent(url: string) {
 }
 
 export default function ShareBar(props: { url?: string }) {
-  const url = props.url ?? useMemo(() => buildFourMemeUrl(), []);
+  const defaultUrl = useMemo(() => buildFourMemeUrl(), []);
+  const url = props.url ?? defaultUrl;
   const twitterHref = useMemo(() => buildTwitterIntent(url), [url]);
   const [copied, setCopied] = useState(false);
 
