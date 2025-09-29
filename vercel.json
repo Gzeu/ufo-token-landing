@@ -1,24 +1,58 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
+  "framework": "nextjs",
   "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "env": {
+    "MONGODB_URI": "@mongodb-uri",
+    "NEXT_PUBLIC_APP_URL": "@next-public-app-url",
+    "WEBHOOK_SECRET": "@webhook-secret"
+  },
+  "functions": {
+    "pages/api/agents/*.ts": {
+      "maxDuration": 30
+    },
+    "pages/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/agents/trigger-all",
+      "schedule": "0 */6 * * *"
+    }
+  ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "headers": [
         {
-          "key": "X-Frame-Options",
-          "value": "DENY"
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         },
         {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
         },
         {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/admin",
+      "destination": "/api/agents/trigger-all",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "/api/health"
     }
   ]
 }
