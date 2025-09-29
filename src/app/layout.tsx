@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   themeColor: '#00ff88',
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.ico',
-    apple: '/favicon.ico',
+    icon: '/ufo-favicon.png',
+    apple: '/ufo-favicon.png',
   },
   openGraph: {
     title: 'UFO Token 🛸 | Beam Your Way to the Moon',
