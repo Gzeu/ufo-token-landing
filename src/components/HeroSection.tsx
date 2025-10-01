@@ -1,10 +1,41 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, ExternalLink, Rocket, Zap } from 'lucide-react'
+import { ArrowRight, ExternalLink, Rocket, Zap, Copy, Share2 } from 'lucide-react'
+import { useState } from 'react'
 import UFOIcon from './UFOIcon'
+import { BRAND_CONFIG, getTradingUrl, getShareText, formatNumber } from '../config/brand'
 
 export default function HeroSection() {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(getTradingUrl())
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.log('Copy failed:', err)
+    }
+  }
+
+  const handleShare = () => {
+    const shareText = getShareText()
+    const shareUrl = getTradingUrl()
+    
+    if (navigator.share) {
+      navigator.share({
+        title: BRAND_CONFIG.meta.title,
+        text: shareText,
+        url: shareUrl,
+      })
+    } else {
+      // Fallback: Open Twitter share dialog
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&hashtags=UFO,Memecoin,BNBChain,DeFi`
+      window.open(twitterUrl, '_blank')
+    }
+  }
+
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16">
       {/* Background Effects */}
@@ -70,7 +101,7 @@ export default function HeroSection() {
         >
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="bg-gradient-to-r from-ufo-beam via-cosmic-purple to-cosmic-pink bg-clip-text text-transparent animate-pulse">
-              UFO Token
+              {BRAND_CONFIG.name}
             </span>
           </h1>
           
@@ -80,7 +111,7 @@ export default function HeroSection() {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="text-2xl md:text-3xl font-semibold text-gray-300 mb-4"
           >
-            🛸 <span className="text-ufo-beam">Beam Your Way</span> to the Moon! 🌙
+            {BRAND_CONFIG.tagline}
           </motion.p>
           
           <motion.p
@@ -89,9 +120,19 @@ export default function HeroSection() {
             transition={{ delay: 1.1, duration: 0.8 }}
             className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed"
           >
-            Join the galactic invasion with random UFO beam airdrops, climb the cosmic leaderboard, 
-            and complete epic alien missions. The most playful meme token in the universe is here!
+            {BRAND_CONFIG.description} Complete cosmic missions, earn beam rewards, and join the most fun community in the galaxy!
           </motion.p>
+        </motion.div>
+
+        {/* Token Info Badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-cosmic-purple/20 border border-cosmic-purple/30 rounded-full text-sm font-medium text-cosmic-purple mb-8"
+        >
+          <span className="w-2 h-2 bg-cosmic-purple rounded-full animate-pulse"></span>
+          Live on {BRAND_CONFIG.token.chain} • Zero Tax • 10% Referral Rewards
         </motion.div>
 
         {/* CTA Buttons */}
@@ -99,10 +140,10 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 0.8 }}
-          className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8"
         >
           <motion.a
-            href="https://four.meme/token/0x7650a9c4543473cb0d1c73de441360bb92374444"
+            href={getTradingUrl()}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(124, 58, 237, 0.6)" }}
@@ -110,7 +151,7 @@ export default function HeroSection() {
             className="btn-primary text-lg px-8 py-4 pulse-glow"
           >
             <Rocket className="w-6 h-6" />
-            Launch to Token
+            Trade UFO Token
             <ExternalLink className="w-5 h-5" />
           </motion.a>
           
@@ -128,17 +169,46 @@ export default function HeroSection() {
           </motion.button>
         </motion.div>
 
+        {/* Share & Copy Buttons */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6, duration: 0.8 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleShare}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-ufo-beam/10 hover:bg-ufo-beam/20 border border-ufo-beam/30 rounded-lg text-ufo-beam transition-colors"
+          >
+            <Share2 className="w-4 h-4" />
+            Earn 10% Referral Fees
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleCopy}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-cosmic-purple/10 hover:bg-cosmic-purple/20 border border-cosmic-purple/30 rounded-lg text-cosmic-purple transition-colors"
+          >
+            <Copy className="w-4 h-4" />
+            {copied ? 'Copied!' : 'Copy Referral Link'}
+          </motion.button>
+        </motion.div>
+
         {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.8, duration: 0.8 }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto"
+          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
         >
           {[
-            { label: "UFO Holders", value: "1,337+", icon: "👥" },
-            { label: "Beam Airdrops", value: "42K+", icon: "⚡" },
-            { label: "Missions Complete", value: "888+", icon: "🎯" }
+            { label: "Holders", value: formatNumber(BRAND_CONFIG.community.holders), icon: "👥" },
+            { label: "Total Trades", value: formatNumber(BRAND_CONFIG.community.totalTrades), icon: "📈" },
+            { label: "Market Cap", value: BRAND_CONFIG.community.marketCap, icon: "💎" },
+            { label: "Mission Pool", value: "100M UFO", icon: "🎯" }
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -147,8 +217,8 @@ export default function HeroSection() {
               transition={{ delay: 2 + index * 0.1, duration: 0.5 }}
               className="text-center p-4 rounded-2xl bg-cosmic-dark/50 backdrop-blur-sm border border-ufo-beam/20"
             >
-              <div className="text-3xl mb-2">{stat.icon}</div>
-              <div className="text-2xl font-bold text-ufo-beam mb-1">{stat.value}</div>
+              <div className="text-2xl mb-2">{stat.icon}</div>
+              <div className="text-xl font-bold text-ufo-beam mb-1">{stat.value}</div>
               <div className="text-gray-400 text-sm">{stat.label}</div>
             </motion.div>
           ))}
